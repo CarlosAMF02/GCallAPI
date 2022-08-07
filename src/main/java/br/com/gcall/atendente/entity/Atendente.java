@@ -1,10 +1,14 @@
 package br.com.gcall.atendente.entity;
 
+import br.com.gcall.atendente.models.AtendenteVM;
 import br.com.gcall.empresa.entity.Empresa;
+import lombok.Data;
 
 import javax.persistence.*;
+import java.util.Calendar;
 import java.util.Date;
 
+@Data
 @Entity(name = "T_GC_ATENDENTE")
 public class Atendente {
     @Id
@@ -29,8 +33,21 @@ public class Atendente {
     @Column(name = "dt_atualizacao", nullable = false)
     private Date updateDate;
 
-    public Atendente(long id, Empresa empresa, String name, long cpf, boolean registerStatus, String email, String password, Date registerDate, Date updateDate) {
-        this.id = id;
+    public Atendente registerAttendant(AtendenteVM atendenteVM, Empresa empresa) {
+        Atendente atendente = new Atendente();
+        atendente.setName(atendenteVM.getName());
+        atendente.setEmail(atendenteVM.getEmail());
+        atendente.setCpf(atendenteVM.getCpf());
+        atendente.setPassword(atendenteVM.getPassword());
+        atendente.setEmpresa(empresa);
+        atendente.setRegisterDate(Calendar.getInstance().getTime());
+        atendente.setUpdateDate(Calendar.getInstance().getTime());
+        atendente.setRegisterStatus(true);
+
+        return atendente;
+    }
+
+    public Atendente(Empresa empresa, String name, long cpf, boolean registerStatus, String email, String password, Date registerDate, Date updateDate) {
         this.empresa = empresa;
         this.name = name;
         this.cpf = cpf;
@@ -43,77 +60,5 @@ public class Atendente {
 
     public Atendente() {
 
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public Empresa getEmpresa() {
-        return empresa;
-    }
-
-    public void setEmpresa(Empresa empresa) {
-        this.empresa = empresa;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public long getCpf() {
-        return cpf;
-    }
-
-    public void setCpf(long cpf) {
-        this.cpf = cpf;
-    }
-
-    public boolean getRegisterStatus() {
-        return registerStatus;
-    }
-
-    public void setRegisterStatus(boolean registerStatus) {
-        this.registerStatus = registerStatus;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public Date getRegisterDate() {
-        return registerDate;
-    }
-
-    public void setRegisterDate(Date registerDate) {
-        this.registerDate = registerDate;
-    }
-
-    public Date getUpdateDate() {
-        return updateDate;
-    }
-
-    public void setUpdateDate(Date updateDate) {
-        this.updateDate = updateDate;
     }
 }

@@ -16,6 +16,10 @@ public class Cliente {
         this.cpf = cpf;
     }
 
+    public Cliente(long cpf) {
+        this.cpf = cpf;
+    }
+
     public Cliente() {
 
     }

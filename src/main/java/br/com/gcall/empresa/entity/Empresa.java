@@ -35,6 +35,23 @@ public class Empresa {
         this.updateDate = updateDate;
     }
 
+    public Empresa(String companyName, long cnpj, String companyEmail, String password, boolean registerStatus) {
+        this.companyName = companyName;
+        this.cnpj = cnpj;
+        this.companyEmail = companyEmail;
+        this.password = password;
+        this.registerStatus = registerStatus;
+    }
+
+    public Empresa(long id, String companyName, long cnpj, String companyEmail, String password, Date updateDate) {
+        this.id = id;
+        this.companyName = companyName;
+        this.cnpj = cnpj;
+        this.companyEmail = companyEmail;
+        this.password = password;
+        this.updateDate = updateDate;
+    }
+
     public Empresa() {
 
     }
@@ -55,11 +72,11 @@ public class Empresa {
         this.companyName = companyName;
     }
 
-    public long getCnpjNumber() {
+    public long getCnpj() {
         return cnpj;
     }
 
-    public void setCnpjNumber(long cnpj) {
+    public void setCnpj(long cnpj) {
         this.cnpj = cnpj;
     }
 

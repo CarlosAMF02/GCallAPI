@@ -1,9 +1,11 @@
 package br.com.gcall.atendente.entity;
 
 import br.com.gcall.chamado.entity.Chamado;
+import lombok.Data;
 
 import javax.persistence.*;
 
+@Data
 @Entity(name = "T_GC_ATENDENTE_CHAMADO")
 public class AtendenteChamado {
     @Id
@@ -17,37 +19,15 @@ public class AtendenteChamado {
     @JoinColumn(name = "cd_chamado")
     private Chamado chamado;
 
-    public AtendenteChamado(long id, Atendente atendente, Chamado chamado) {
-        this.id = id;
+    public AtendenteChamado(Atendente atendente, Chamado chamado) {
         this.atendente = atendente;
         this.chamado = chamado;
     }
+
+
 
     public AtendenteChamado() {
 
     }
 
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public Atendente getAtendente() {
-        return atendente;
-    }
-
-    public void setAtendente(Atendente atendente) {
-        this.atendente = atendente;
-    }
-
-    public Chamado getChamado() {
-        return chamado;
-    }
-
-    public void setChamado(Chamado chamado) {
-        this.chamado = chamado;
-    }
 }

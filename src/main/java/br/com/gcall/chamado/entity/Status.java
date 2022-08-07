@@ -19,6 +19,11 @@ public class Status {
         this.description = description;
     }
 
+    public Status(String statusName, String description) {
+        this.statusName = statusName;
+        this.description = description;
+    }
+
     public Status() {
 
     }
