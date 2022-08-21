@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AtendenteChamadoService {
@@ -25,27 +26,21 @@ public class AtendenteChamadoService {
     @Autowired
     private AtendenteService atendenteService;
 
-    public int insertCallToAttendant(AtendenteChamadoVM atendenteChamadoVM){
+    public void insertCallToAttendant(Atendente atendente, Chamado chamado){
         try {
-            Atendente atendente = atendenteService.getAttendantById(atendenteChamadoVM.getAtendenteId());
-            Chamado chamado = chamadoService.getCallById(atendenteChamadoVM.getChamadoId());
-            if (atendente == null || chamado == null) throw new Exception();
             AtendenteChamado atendenteChamado = new AtendenteChamado(atendente, chamado);
             atendenteChamadoRepository.save(atendenteChamado);
         } catch (Exception e) {
             e.printStackTrace();
-            return 1;
         }
-        return 0;
     }
 
     public int deleteAttendantCall (long attendantCallId) {
         try {
-            if (!atendenteChamadoRepository.existsById(attendantCallId)) return 2;
+            if (!atendenteChamadoRepository.existsById(attendantCallId)) return 1;
             atendenteChamadoRepository.deleteById(attendantCallId);
         } catch (Exception e) {
             e.printStackTrace();
-            return 1;
         }
         return 0;
     }
@@ -60,12 +55,10 @@ public class AtendenteChamadoService {
         return attendantsCalls;
     }
 
-    public List<AtendenteChamado> getAttendantCallsById  (long attendantId) {
+    public List<AtendenteChamado> getAttendantCallsById  (Atendente atendente) {
         List<AtendenteChamado> attendantCalls = null;
         try {
-            Atendente attendant = atendenteService.getAttendantById(attendantId);
-            if (attendant == null) throw new Exception();
-            attendantCalls = atendenteChamadoRepository.findByAtendente(attendant);
+            attendantCalls = atendenteChamadoRepository.findByAtendente(atendente);
         } catch (Exception e) {
             e.printStackTrace();
         }

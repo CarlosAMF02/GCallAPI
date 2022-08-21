@@ -5,6 +5,7 @@ import br.com.gcall.chamado.models.StatusVM;
 import br.com.gcall.chamado.services.StatusService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.websocket.server.PathParam;
@@ -25,25 +26,33 @@ public class StatusController {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.FOUND)
-    public Status getStatus(@PathVariable(name = "id") long statusId) {
-        return statusService.getStatusById(statusId);
+    public ResponseEntity<Status> getStatus(@PathVariable(name = "id") long statusId) {
+        return ResponseEntity.of(statusService.getStatusById(statusId));
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public int createStatus(@RequestBody StatusVM statusVM) {
-        return statusService.insertStatus(statusVM);
+    public ResponseEntity<StatusVM> createStatus(@RequestBody StatusVM statusVM) {
+        statusService.insertStatus(statusVM);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(statusVM);
     }
 
-    @PostMapping("/{id}")
+    @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public int updateStatus(@RequestBody StatusVM statusVM,@PathVariable(name = "id") long statusId) {
-        return statusService.updateStatus(statusVM, statusId);
+    public ResponseEntity<StatusVM> updateStatus(@RequestBody StatusVM statusVM,@PathVariable(name = "id") long statusId) {
+        int responseStatus = statusService.updateStatus(statusVM, statusId);
+
+        if(responseStatus == 1) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        return ResponseEntity.ok(statusVM);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public int deleteStatus(@PathVariable(name = "id") long statusId) {
-        return statusService.deleteStatus(statusId);
+    public ResponseEntity<Object> deleteStatus(@PathVariable(name = "id") long statusId) {
+        int responseStatus = statusService.deleteStatus(statusId);
+
+        if (responseStatus == 1) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

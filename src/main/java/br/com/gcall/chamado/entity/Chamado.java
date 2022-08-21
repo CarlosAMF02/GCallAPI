@@ -8,7 +8,6 @@ import javax.persistence.*;
 import java.util.Calendar;
 import java.util.Date;
 
-@Data
 @Entity(name = "T_GC_CHAMADO")
 public class Chamado {
     @Id
@@ -52,7 +51,6 @@ public class Chamado {
         chamado.setDepartamentName(chamadoVM.getDepartamentName());
         chamado.setDescription(chamadoVM.getDescription());
         chamado.setRegisterStatus(true);
-        chamado.setRegisterDate(Calendar.getInstance().getTime());
         chamado.setUpdateDate(Calendar.getInstance().getTime());
         return chamado;
     }
@@ -69,4 +67,68 @@ public class Chamado {
     }
 
     public Chamado() { }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
+
+    public String getDepartamentName() {
+        return departamentName;
+    }
+
+    public void setDepartamentName(String departamentName) {
+        this.departamentName = departamentName;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public boolean isRegisterStatus() {
+        return registerStatus;
+    }
+
+    public void setRegisterStatus(boolean registerStatus) {
+        this.registerStatus = registerStatus;
+    }
+
+    public Date getRegisterDate() {
+        return registerDate;
+    }
+
+    public void setRegisterDate(Date registerDate) {
+        this.registerDate = registerDate;
+    }
+
+    public Date getUpdateDate() {
+        return updateDate;
+    }
+
+    public void setUpdateDate(Date updateDate) {
+        this.updateDate = updateDate;
+    }
 }

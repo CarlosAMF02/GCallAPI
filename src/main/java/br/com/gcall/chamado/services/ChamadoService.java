@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ChamadoService {
@@ -20,11 +21,12 @@ public class ChamadoService {
     @Autowired
     private ClienteService clienteService;
 
-    public int insertCall(ChamadoVM chamadoVM, long statusId, long clienteId) {
+    public int insertCall(ChamadoVM chamadoVM) {
         try {
-            Status status = statusService.getStatusById(statusId);
-            Cliente cliente = clienteService.findClientById(clienteId);
+            Status status = statusService.getStatusById(chamadoVM.getStatusId()).orElse(null);
+            Cliente cliente = clienteService.findClientById(chamadoVM.getClienteId()).orElse(null);
             if (cliente == null || status == null) throw new Exception();
+
             Chamado chamado = new Chamado().registerCall(chamadoVM, status, cliente);
             chamadoRepository.save(chamado);
         } catch (Exception e) {
@@ -37,23 +39,16 @@ public class ChamadoService {
     public int updateCall(ChamadoVM chamadoVM, long chamadoId) {
         try {
             Chamado chamado = chamadoRepository.findById(chamadoId).orElse(null);
-            if (chamado == null) return 2;
-            if (chamadoVM.getClienteId() != 0L) {
-                Cliente cliente = clienteService.findClientById(chamadoVM.getClienteId());
-                if (cliente == null) return 2;
-                chamado.setCliente(cliente);
-            }
-            if (chamadoVM.getStatusId() != 0L) {
-                Status status = statusService.getStatusById(chamadoVM.getStatusId());
-                if (status == null) return 2;
-                chamado.setStatus(status);
-            }
-            if (chamadoVM.getDepartamentName() != null) chamado.setDepartamentName(chamadoVM.getDepartamentName());
-            if (chamadoVM.getDescription() != null) chamado.setDescription(chamadoVM.getDescription());
+            Cliente cliente = clienteService.findClientById(chamadoVM.getClienteId()).orElse(null);
+            Status status = statusService.getStatusById(chamadoVM.getStatusId()).orElse(null);
+
+            if (chamado == null || cliente == null || status == null) return 1;
+
+            chamado = chamado.updateCall(chamadoVM, status, cliente, chamadoId);
+
             chamadoRepository.save(chamado);
         } catch (Exception e) {
             e.printStackTrace();
-            return 1;
         }
         return 0;
     }
@@ -61,24 +56,18 @@ public class ChamadoService {
     public int deleteCall(long chamadoId) {
         try {
             if (!chamadoRepository.existsById(chamadoId)) {
-                return 2;
+                return 1;
             }
             chamadoRepository.deleteById(chamadoId);
         } catch (Exception e) {
             e.printStackTrace();
-            return 1;
         }
         return 0;
     }
 
-    public Chamado getCallById(long chamadoId) {
-        Chamado chamado = null;
-        try {
-            chamado = chamadoRepository.findById(chamadoId).orElse(null);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return chamado;
+    public Optional<Chamado> getCallById(long chamadoId) {
+
+        return chamadoRepository.findById(chamadoId);
     }
 
     public List<Chamado> getCalls() {
@@ -91,11 +80,9 @@ public class ChamadoService {
         return callList;
     }
 
-    public List<Chamado> getCallsByClientId(long clientId) {
+    public List<Chamado> getCallsByClientId(Cliente cliente) {
         List<Chamado> callList = null;
         try {
-            Cliente cliente = clienteService.findClientById(clientId);
-            if (cliente == null) return null;
             callList = chamadoRepository.findByCliente(cliente);
         } catch (Exception e) {
             e.printStackTrace();

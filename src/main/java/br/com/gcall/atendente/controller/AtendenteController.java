@@ -7,6 +7,7 @@ import br.com.gcall.empresa.models.EmpresaVM;
 import br.com.gcall.models.LoginModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,32 +24,44 @@ public class AtendenteController {
     }
 
     @GetMapping("/{id}")
-    @ResponseStatus(HttpStatus.FOUND)
-    public Atendente getAttendant(@PathVariable(name = "id") long attendantId) {
-        return atendenteService.getAttendantById(attendantId);
+    public ResponseEntity<Atendente> getAttendant(@PathVariable(name = "id") long attendantId) {
+        return ResponseEntity.of(atendenteService.getAttendantById(attendantId));
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public int createAttendant(@RequestBody AtendenteVM atendenteVM) {
-        return atendenteService.insertAttendant(atendenteVM);
+    public ResponseEntity<AtendenteVM> createAttendant(@RequestBody AtendenteVM atendenteVM) {
+        int responseStatus = atendenteService.insertAttendant(atendenteVM);
+
+        if (responseStatus == 1) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        return ResponseEntity.status(HttpStatus.CREATED).body(atendenteVM);
     }
 
-    @PostMapping("/update/{id}/{companyId}")
+    @PutMapping("/update/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public int updateAttendant(@RequestBody AtendenteVM attendant, @PathVariable(name = "id") long attendantId, @PathVariable(name = "companyId") long companyId) {
-        return atendenteService.updateAttendant(attendant, attendantId);
+    public ResponseEntity<AtendenteVM> updateAttendant(@RequestBody AtendenteVM atendenteVM, @PathVariable(name = "id") long attendantId) {
+        int responseStatus = atendenteService.updateAttendant(atendenteVM, attendantId);
+
+        if (responseStatus == 1) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        return ResponseEntity.ok(atendenteVM);
     }
 
     @DeleteMapping("/delete/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public int deleteAttendant(@PathVariable(name = "id") long attendantId) {
-        return atendenteService.deleteAttendant(attendantId);
+    public ResponseEntity<Object> deleteAttendant(@PathVariable(name = "id") long attendantId) {
+        int responseStatus = atendenteService.deleteAttendant(attendantId);
+
+        if (responseStatus == 1) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @PostMapping("/login")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public boolean login (LoginModel credentials) {
-        return atendenteService.login(credentials);
+    public ResponseEntity<LoginModel> login (LoginModel credentials) {
+        int responseStatus = atendenteService.login(credentials);
+
+        if (responseStatus == 1) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        if (responseStatus == 2) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        return ResponseEntity.ok(credentials);
+
     }
 }

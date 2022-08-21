@@ -5,17 +5,20 @@ import br.com.gcall.cliente.repository.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class ClienteService {
     @Autowired
     private ClienteRepository clienteRepository;
 
-    public Cliente findClient(long cpf){
+    public Cliente findCreateClient(long cpf){
         Cliente cliente = null;
         try {
             cliente = clienteRepository.findByCpf(cpf);
             if(cliente == null) {
                 cliente = new Cliente(cpf);
+                clienteRepository.save(cliente);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -23,13 +26,7 @@ public class ClienteService {
         return cliente;
     }
 
-    public Cliente findClientById(long id) {
-        Cliente cliente = null;
-        try {
-            cliente = clienteRepository.findById(id).orElse(null);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return cliente;
+    public Optional<Cliente> findClientById(long id) {
+        return clienteRepository.findById(id);
     }
 }

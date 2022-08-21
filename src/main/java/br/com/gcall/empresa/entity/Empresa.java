@@ -1,6 +1,9 @@
 package br.com.gcall.empresa.entity;
 
+import br.com.gcall.empresa.models.EmpresaVM;
+
 import javax.persistence.*;
+import java.util.Calendar;
 import java.util.Date;
 
 @Entity(name = "T_GC_EMPRESA")
@@ -41,19 +44,22 @@ public class Empresa {
         this.companyEmail = companyEmail;
         this.password = password;
         this.registerStatus = registerStatus;
-    }
-
-    public Empresa(long id, String companyName, long cnpj, String companyEmail, String password, Date updateDate) {
-        this.id = id;
-        this.companyName = companyName;
-        this.cnpj = cnpj;
-        this.companyEmail = companyEmail;
-        this.password = password;
-        this.updateDate = updateDate;
+        this.registerDate = Calendar.getInstance().getTime();
+        this.updateDate = Calendar.getInstance().getTime();
     }
 
     public Empresa() {
 
+    }
+
+    public Empresa updateEmpresa (Empresa empresa, EmpresaVM empresaVM) {
+        empresa.setCompanyEmail(empresaVM.getCompanyEmail());
+        empresa.setCompanyName(empresaVM.getCompanyName());
+        empresa.setCnpj(empresaVM.getCnpj());
+        empresa.setPassword(empresaVM.getPassword());
+        empresa.setUpdateDate(Calendar.getInstance().getTime());
+
+        return empresa;
     }
 
     public long getId() {

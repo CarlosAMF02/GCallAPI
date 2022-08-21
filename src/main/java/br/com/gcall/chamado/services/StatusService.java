@@ -14,51 +14,40 @@ public class StatusService {
     @Autowired
     private StatusRepository statusRepository;
 
-    public int insertStatus(StatusVM statusVM) {
+    public void insertStatus(StatusVM statusVM) {
         try {
             Status status = new Status(statusVM.getStatusName(), statusVM.getDescription());
             statusRepository.save(status);
         } catch (Exception e) {
             e.printStackTrace();
-            return 1;
         }
-        return 0;
     }
 
     public int updateStatus(StatusVM statusVM, long statusId) {
         try {
-            if (statusRepository.existsById(statusId)){
-                Status status = new Status(statusId, statusVM.getStatusName(), statusVM.getDescription());
-                statusRepository.save(status);
-            }
+            if (!statusRepository.existsById(statusId)) return 1;
+
+            Status status = new Status(statusId, statusVM.getStatusName(), statusVM.getDescription());
+            statusRepository.save(status);
         } catch (Exception e) {
             e.printStackTrace();
-            return 1;
         }
         return 0;
     }
 
     public int deleteStatus(long statusId) {
         try {
-            if (!statusRepository.existsById(statusId)) {
-                return 2;
-            }
+            if (!statusRepository.existsById(statusId)) return 1;
+
             statusRepository.deleteById(statusId);
         } catch (Exception e) {
             e.printStackTrace();
-            return 1;
         }
         return 0;
     }
 
-    public Status getStatusById(long statusId) {
-        Status status = null;
-        try {
-            status = statusRepository.findById(statusId).orElse(null);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return status;
+    public Optional<Status> getStatusById(long statusId) {
+        return statusRepository.findById(statusId);
     }
 
     public List<Status> getStatus() {

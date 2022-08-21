@@ -16,59 +16,42 @@ public class EmpresaService {
     @Autowired
     private EmpresaRepository empresaRepository;
 
-    public int insertCompany(EmpresaVM empresaVM) {
+    public void insertCompany(EmpresaVM empresaVM) {
         try {
             Empresa empresa = new Empresa(empresaVM.getCompanyName(), empresaVM.getCnpj(), empresaVM.getCompanyEmail(), empresaVM.getPassword(), true);
-            empresa.setRegisterDate(Calendar.getInstance().getTime());
-            empresa.setUpdateDate(Calendar.getInstance().getTime());
             empresaRepository.save(empresa);
         } catch (Exception e) {
             e.printStackTrace();
-            return 1;
         }
-        return 0;
     }
 
     public int updateCompany(EmpresaVM empresaVM, long companyId) {
         try {
             Empresa empresa = empresaRepository.findById(companyId).orElse(null);
-            if (empresa == null) return 2;
-            if (empresaVM.getCompanyEmail() != null) empresa.setCompanyEmail(empresaVM.getCompanyEmail());
-            if (empresaVM.getCompanyName() != null) empresa.setCompanyName(empresaVM.getCompanyName());
-            if (empresaVM.getCnpj() != 0L) empresa.setCnpj(empresaVM.getCnpj());
-            if (empresaVM.getPassword() != null) empresa.setPassword(empresaVM.getPassword());
-            empresa.setUpdateDate(Calendar.getInstance().getTime());
+            if (empresa == null) return 1;
+            empresa = empresa.updateEmpresa(empresa, empresaVM);
+
             empresaRepository.save(empresa);
         }
         catch (Exception e) {
             e.printStackTrace();
-            return 1;
         }
         return 0;
     }
 
     public int deleteCompany(long companyId) {
         try {
-            if (!empresaRepository.existsById(companyId)) {
-                return 2;
-            }
+            if (!empresaRepository.existsById(companyId)) return 1;
+
             empresaRepository.deleteById(companyId);
         } catch (Exception e) {
             e.printStackTrace();
-            return 1;
         }
         return 0;
     }
 
-    public Empresa getCompanyById(long companyId) {
-        Empresa company = null;
-        try {
-            company = empresaRepository.findById(companyId).orElse(null);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return company;
+    public Optional<Empresa> getCompanyById(long companyId) {
+        return empresaRepository.findById(companyId);
     }
 
     public List<Empresa> getCompanies() {
@@ -81,14 +64,14 @@ public class EmpresaService {
         return companyList;
     }
 
-    public boolean login(LoginModel credentials) {
+    public int login(LoginModel credentials) {
         try {
             Empresa empresa = empresaRepository.findByCompanyEmail(credentials.getEmail());
-            if (empresa == null || !empresa.getPassword().equals(credentials.getPassword())) return false;
+            if (empresa == null) return 1;
+            if (!empresa.getPassword().equals(credentials.getPassword())) return 2;
         } catch (Exception e) {
             e.printStackTrace();
-            return false;
         }
-        return true;
+        return 0;
     }
 }

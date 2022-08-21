@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AtendenteService {
@@ -21,7 +22,7 @@ public class AtendenteService {
 
     public int insertAttendant(AtendenteVM atendenteVM){
         try {
-            Empresa empresa = empresaService.getCompanyById(atendenteVM.getCompanyId());
+            Empresa empresa = empresaService.getCompanyById(atendenteVM.getCompanyId()).orElse(null);
             if (empresa == null) throw new Exception();
             Atendente atendente = new Atendente().registerAttendant(atendenteVM, empresa);
             atendenteRepository.save(atendente);
@@ -35,12 +36,12 @@ public class AtendenteService {
     public int updateAttendant(AtendenteVM atendenteVM, long attendantId){
         try {
             Atendente atendente = atendenteRepository.findById(attendantId).orElse(null);
-            if (atendente==null) return 2;
-            if (atendenteVM.getCompanyId()!= 0L) {
-                Empresa empresa = empresaService.getCompanyById(atendenteVM.getCompanyId());
-                if(empresa==null) return 2;
-                atendente.setEmpresa(empresa);
-            }
+            if (atendente==null) throw new Exception();
+
+            Empresa empresa = empresaService.getCompanyById(atendenteVM.getCompanyId()).orElse(null);
+            if(empresa==null) throw new Exception();
+
+            atendente.setEmpresa(empresa);
             if (atendenteVM.getEmail()!=null) atendente.setEmail(atendenteVM.getEmail());
             if (atendenteVM.getPassword()!=null) atendente.setPassword(atendenteVM.getPassword());
             if (atendenteVM.getName()!=null) atendente.setName(atendenteVM.getName());
@@ -56,7 +57,7 @@ public class AtendenteService {
 
     public int deleteAttendant (long attendantId) {
         try {
-            if (!atendenteRepository.existsById(attendantId)) return 2;
+            if (!atendenteRepository.existsById(attendantId)) throw new Exception();
             atendenteRepository.deleteById(attendantId);
         } catch (Exception e) {
             e.printStackTrace();
@@ -65,14 +66,9 @@ public class AtendenteService {
         return 0;
     }
 
-    public Atendente getAttendantById (long attendantId) {
-        Atendente atendente = null;
-        try {
-            atendente = atendenteRepository.findById(attendantId).orElse(null);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return atendente;
+    public Optional<Atendente> getAttendantById (long attendantId) {
+
+        return atendenteRepository.findById(attendantId);
     }
 
     public List<Atendente> getAttendants () {
@@ -88,7 +84,7 @@ public class AtendenteService {
     public List<Atendente> getAttendantsByCompanyId  (long companyId) {
         List<Atendente> atendentes = null;
         try {
-            Empresa empresa = empresaService.getCompanyById(companyId);
+            Empresa empresa = empresaService.getCompanyById(companyId).orElse(null);
             if (empresa == null) throw new Exception();
             atendentes = atendenteRepository.findByEmpresa(empresa);
         } catch (Exception e) {
@@ -97,13 +93,15 @@ public class AtendenteService {
         return atendentes;
     }
 
-    public boolean login(LoginModel credentials) {
+    public int login(LoginModel credentials) {
         try {
             Atendente atendente = atendenteRepository.findByEmail(credentials.getEmail());
-            if (atendente == null || atendente.getPassword() != credentials.getPassword()) return false;
+
+            if (atendente == null) return 1;
+            if(!atendente.getPassword().equals(credentials.getPassword())) return 2;
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return true;
+        return 0;
     }
 }
