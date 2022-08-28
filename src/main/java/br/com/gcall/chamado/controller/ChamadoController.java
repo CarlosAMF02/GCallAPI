@@ -35,7 +35,7 @@ public class ChamadoController {
         return ResponseEntity.ok(chamado);
     }
 
-    @PostMapping("/{statusId}/{clientId}")
+    @PostMapping("/")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<ChamadoVM> createCall(@RequestBody ChamadoVM chamadoVM) {
         int responseStatus = chamadoService.insertCall(chamadoVM);
@@ -44,7 +44,7 @@ public class ChamadoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(chamadoVM);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<ChamadoVM> updateCall(@RequestBody ChamadoVM chamadoVM, @PathVariable(name = "id") long chamadoId) {
         int responseStatus =  chamadoService.updateCall(chamadoVM, chamadoId);
 
@@ -52,7 +52,7 @@ public class ChamadoController {
         return ResponseEntity.ok(chamadoVM);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Object> deleteCall(@PathVariable(name = "id") long chamadoId) {
         int responseStatus = chamadoService.deleteCall(chamadoId);

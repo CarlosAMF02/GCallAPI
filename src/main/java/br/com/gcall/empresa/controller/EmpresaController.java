@@ -36,7 +36,7 @@ public class EmpresaController {
         return ResponseEntity.status(HttpStatus.CREATED).body(empresaVM);
     }
 
-    @PostMapping("/update/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<EmpresaVM> updateCompany(@RequestBody EmpresaVM company, @PathVariable(name = "id") long companyId) {
         int responseStatus = empresaService.updateCompany(company, companyId);
 

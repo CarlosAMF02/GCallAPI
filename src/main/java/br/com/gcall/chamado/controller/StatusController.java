@@ -38,7 +38,7 @@ public class StatusController {
         return ResponseEntity.status(HttpStatus.CREATED).body(statusVM);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<StatusVM> updateStatus(@RequestBody StatusVM statusVM,@PathVariable(name = "id") long statusId) {
         int responseStatus = statusService.updateStatus(statusVM, statusId);
@@ -47,7 +47,7 @@ public class StatusController {
         return ResponseEntity.ok(statusVM);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Object> deleteStatus(@PathVariable(name = "id") long statusId) {
         int responseStatus = statusService.deleteStatus(statusId);

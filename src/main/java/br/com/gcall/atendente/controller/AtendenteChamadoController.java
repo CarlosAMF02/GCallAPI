@@ -49,7 +49,6 @@ public class AtendenteChamadoController {
     }
 
     @DeleteMapping("/delete/{id}")
-    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Object> deleteAttendantCall(@PathVariable(name = "id") long attendantCallId) {
         int responseStatus = atendenteChamadoService.deleteAttendantCall(attendantCallId);
 
