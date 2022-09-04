@@ -12,4 +12,5 @@ import java.util.Optional;
 public interface AtendenteRepository extends JpaRepository<Atendente, Long> {
     List<Atendente> findByEmpresa(Empresa empresa);
     Optional<Atendente> findByEmail(String email);
+    Optional<Atendente> findByCpf(long cpf);
 }

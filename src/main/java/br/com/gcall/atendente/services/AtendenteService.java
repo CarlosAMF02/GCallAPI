@@ -26,6 +26,8 @@ public class AtendenteService {
             if (empresa == null) return 1;
             Atendente atendente = atendenteRepository.findByEmail(atendenteVM.getEmail()).orElse(null);
             if (atendente != null) return 3;
+            atendente = atendenteRepository.findByCpf(atendenteVM.getCpf()).orElse(null);
+            if (atendente != null) return 3;
             atendente = new Atendente().registerAttendant(atendenteVM, empresa);
             atendenteRepository.save(atendente);
         } catch (Exception e) {

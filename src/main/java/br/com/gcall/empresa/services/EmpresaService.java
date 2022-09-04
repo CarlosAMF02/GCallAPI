@@ -20,6 +20,8 @@ public class EmpresaService {
         try {
             Empresa empresa = empresaRepository.findByCompanyEmail(empresaVM.getCompanyEmail()).orElse(null);
             if (empresa != null) return 3;
+            empresa = empresaRepository.findByCnpj(empresaVM.getCnpj()).orElse(null);
+            if (empresa != null) return 3;
             empresa = new Empresa(empresaVM.getCompanyName(), empresaVM.getCnpj(), empresaVM.getCompanyEmail(), empresaVM.getPassword(), true);
             empresaRepository.save(empresa);
         } catch (Exception e) {
