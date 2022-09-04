@@ -16,13 +16,16 @@ public class EmpresaService {
     @Autowired
     private EmpresaRepository empresaRepository;
 
-    public void insertCompany(EmpresaVM empresaVM) {
+    public int insertCompany(EmpresaVM empresaVM) {
         try {
-            Empresa empresa = new Empresa(empresaVM.getCompanyName(), empresaVM.getCnpj(), empresaVM.getCompanyEmail(), empresaVM.getPassword(), true);
+            Empresa empresa = empresaRepository.findByCompanyEmail(empresaVM.getCompanyEmail()).orElse(null);
+            if (empresa != null) return 3;
+            empresa = new Empresa(empresaVM.getCompanyName(), empresaVM.getCnpj(), empresaVM.getCompanyEmail(), empresaVM.getPassword(), true);
             empresaRepository.save(empresa);
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return 0;
     }
 
     public int updateCompany(EmpresaVM empresaVM, long companyId) {
@@ -66,7 +69,7 @@ public class EmpresaService {
 
     public int login(LoginModel credentials) {
         try {
-            Empresa empresa = empresaRepository.findByCompanyEmail(credentials.getEmail());
+            Empresa empresa = empresaRepository.findByCompanyEmail(credentials.getEmail()).orElse(null);
             if (empresa == null) return 1;
             if (!empresa.getPassword().equals(credentials.getPassword())) return 2;
         } catch (Exception e) {

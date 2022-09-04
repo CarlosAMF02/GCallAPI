@@ -23,12 +23,13 @@ public class AtendenteService {
     public int insertAttendant(AtendenteVM atendenteVM){
         try {
             Empresa empresa = empresaService.getCompanyById(atendenteVM.getCompanyId()).orElse(null);
-            if (empresa == null) throw new Exception();
-            Atendente atendente = new Atendente().registerAttendant(atendenteVM, empresa);
+            if (empresa == null) return 1;
+            Atendente atendente = atendenteRepository.findByEmail(atendenteVM.getEmail()).orElse(null);
+            if (atendente != null) return 3;
+            atendente = new Atendente().registerAttendant(atendenteVM, empresa);
             atendenteRepository.save(atendente);
         } catch (Exception e) {
             e.printStackTrace();
-            return 1;
         }
         return 0;
     }
@@ -95,7 +96,7 @@ public class AtendenteService {
 
     public int login(LoginModel credentials) {
         try {
-            Atendente atendente = atendenteRepository.findByEmail(credentials.getEmail());
+            Atendente atendente = atendenteRepository.findByEmail(credentials.getEmail()).orElse(null);
 
             if (atendente == null) return 1;
             if(!atendente.getPassword().equals(credentials.getPassword())) return 2;

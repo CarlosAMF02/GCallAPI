@@ -35,8 +35,7 @@ public class ChamadoController {
         return ResponseEntity.ok(chamado);
     }
 
-    @PostMapping("/")
-    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping()
     public ResponseEntity<ChamadoVM> createCall(@RequestBody ChamadoVM chamadoVM) {
         int responseStatus = chamadoService.insertCall(chamadoVM);
 

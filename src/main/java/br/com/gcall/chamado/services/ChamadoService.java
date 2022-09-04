@@ -44,7 +44,7 @@ public class ChamadoService {
 
             if (chamado == null || cliente == null || status == null) return 1;
 
-            chamado = chamado.updateCall(chamadoVM, status, cliente, chamadoId);
+            chamado = chamado.updateCall(chamado, chamadoVM, status, cliente, chamadoId);
 
             chamadoRepository.save(chamado);
         } catch (Exception e) {

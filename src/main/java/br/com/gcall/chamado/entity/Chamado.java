@@ -43,7 +43,7 @@ public class Chamado {
         return chamado;
     }
 
-    public Chamado updateCall(ChamadoVM chamadoVM, Status status, Cliente cliente, long chamadoId){
+    public Chamado updateCall(Chamado chamadoInicial, ChamadoVM chamadoVM, Status status, Cliente cliente, long chamadoId){
         Chamado chamado = new Chamado();
         chamado.setId(chamadoId);
         chamado.setStatus(status);
@@ -52,6 +52,7 @@ public class Chamado {
         chamado.setDescription(chamadoVM.getDescription());
         chamado.setRegisterStatus(true);
         chamado.setUpdateDate(Calendar.getInstance().getTime());
+        chamado.setRegisterDate(chamadoInicial.getRegisterDate());
         return chamado;
     }
 

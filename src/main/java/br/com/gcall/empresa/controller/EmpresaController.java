@@ -31,8 +31,8 @@ public class EmpresaController {
 
     @PostMapping()
     public ResponseEntity<EmpresaVM> createCompany(@RequestBody EmpresaVM empresaVM) {
-        empresaService.insertCompany(empresaVM);
-
+        int responseStatus = empresaService.insertCompany(empresaVM);
+        if (responseStatus == 3) return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
         return ResponseEntity.status(HttpStatus.CREATED).body(empresaVM);
     }
 
@@ -53,7 +53,7 @@ public class EmpresaController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Object> login (LoginModel credentials) {
+    public ResponseEntity<Object> login (@RequestBody LoginModel credentials) {
         int responseStatus = empresaService.login(credentials);
 
         if (responseStatus == 1) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();

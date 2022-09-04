@@ -34,6 +34,7 @@ public class AtendenteController {
         int responseStatus = atendenteService.insertAttendant(atendenteVM);
 
         if (responseStatus == 1) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        if (responseStatus == 3) return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
         return ResponseEntity.status(HttpStatus.CREATED).body(atendenteVM);
     }
 
@@ -56,7 +57,7 @@ public class AtendenteController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginModel> login (LoginModel credentials) {
+    public ResponseEntity<LoginModel> login (@RequestBody LoginModel credentials) {
         int responseStatus = atendenteService.login(credentials);
 
         if (responseStatus == 1) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
