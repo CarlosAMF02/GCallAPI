@@ -28,18 +28,21 @@ public class AtendenteController {
         return ResponseEntity.of(atendenteService.getAttendantById(attendantId));
     }
 
+    @GetMapping("/empresa/{id}")
+    public List<Atendente> getAttendantByCompanyId(@PathVariable(name = "id") long comapnyId) {
+        return atendenteService.getAttendantsByCompanyId(comapnyId);
+    }
+
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<AtendenteVM> createAttendant(@RequestBody AtendenteVM atendenteVM) {
         int responseStatus = atendenteService.insertAttendant(atendenteVM);
 
         if (responseStatus == 1) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        if (responseStatus == 3) return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+        if (responseStatus == 3) return ResponseEntity.status(HttpStatus.CONFLICT).build();
         return ResponseEntity.status(HttpStatus.CREATED).body(atendenteVM);
     }
 
     @PutMapping("/update/{id}")
-    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<AtendenteVM> updateAttendant(@RequestBody AtendenteVM atendenteVM, @PathVariable(name = "id") long attendantId) {
         int responseStatus = atendenteService.updateAttendant(atendenteVM, attendantId);
 
@@ -48,7 +51,6 @@ public class AtendenteController {
     }
 
     @DeleteMapping("/delete/{id}")
-    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Object> deleteAttendant(@PathVariable(name = "id") long attendantId) {
         int responseStatus = atendenteService.deleteAttendant(attendantId);
 
