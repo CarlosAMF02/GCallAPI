@@ -32,7 +32,7 @@ public class EmpresaController {
     @PostMapping()
     public ResponseEntity<EmpresaVM> createCompany(@RequestBody EmpresaVM empresaVM) {
         int responseStatus = empresaService.insertCompany(empresaVM);
-        if (responseStatus == 3) return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+        if (responseStatus == 3) return ResponseEntity.status(HttpStatus.CONFLICT).build();
         return ResponseEntity.status(HttpStatus.CREATED).body(empresaVM);
     }
 
