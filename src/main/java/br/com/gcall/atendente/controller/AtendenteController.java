@@ -59,12 +59,12 @@ public class AtendenteController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginModel> login (@RequestBody LoginModel credentials) {
-        int responseStatus = atendenteService.login(credentials);
+    public ResponseEntity<Atendente> login (@RequestBody LoginModel credentials) {
+        Atendente atendente = atendenteService.login(credentials);
 
-        if (responseStatus == 1) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        if (responseStatus == 2) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        return ResponseEntity.ok(credentials);
+        if (atendente == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+
+        return ResponseEntity.ok(atendente);
 
     }
 }

@@ -53,11 +53,10 @@ public class EmpresaController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Object> login (@RequestBody LoginModel credentials) {
-        int responseStatus = empresaService.login(credentials);
+    public ResponseEntity<Empresa> login (@RequestBody LoginModel credentials) {
+        Empresa empresa = empresaService.login(credentials);
 
-        if (responseStatus == 1) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        if (responseStatus == 2) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        return ResponseEntity.ok(credentials);
+        if (empresa == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        return ResponseEntity.ok(empresa);
     }
 }

@@ -96,15 +96,16 @@ public class AtendenteService {
         return atendentes;
     }
 
-    public int login(LoginModel credentials) {
+    public Atendente login(LoginModel credentials) {
         try {
             Atendente atendente = atendenteRepository.findByEmail(credentials.getEmail()).orElse(null);
 
-            if (atendente == null) return 1;
-            if(!atendente.getPassword().equals(credentials.getPassword())) return 2;
+            if (atendente == null) return null;
+            if(!atendente.getPassword().equals(credentials.getPassword())) return null;
+            return atendente;
         } catch (Exception e) {
             e.printStackTrace();
+            return null;
         }
-        return 0;
     }
 }
