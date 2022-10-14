@@ -72,14 +72,15 @@ public class EmpresaService {
         return companyList;
     }
 
-    public int login(LoginModel credentials) {
+    public Empresa login(LoginModel credentials) {
         try {
             Empresa empresa = empresaRepository.findByCompanyEmail(credentials.getEmail()).orElse(null);
-            if (empresa == null) return 1;
-            if (!empresa.getPassword().equals(credentials.getPassword())) return 2;
+            if (empresa == null) return null;
+            if (!empresa.getPassword().equals(credentials.getPassword())) return null;
+            return empresa;
         } catch (Exception e) {
             e.printStackTrace();
+            return null;
         }
-        return 0;
     }
 }
