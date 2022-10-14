@@ -1,6 +1,7 @@
 package br.com.gcall.cliente.controller;
 
 import br.com.gcall.cliente.entity.Cliente;
+import br.com.gcall.cliente.models.ClienteVM;
 import br.com.gcall.cliente.services.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -12,8 +13,8 @@ public class ClienteController {
     @Autowired
     ClienteService clienteService;
 
-    @GetMapping("/{cpf}")
-    public ResponseEntity<Cliente> findCreateClient(@PathVariable(name = "cpf") long cpf){
-        return ResponseEntity.ok(clienteService.findCreateClient(cpf));
+    @PostMapping
+    public ResponseEntity<Cliente> findCreateClient(@RequestBody ClienteVM clienteVM){
+        return ResponseEntity.ok(clienteService.findCreateClient(clienteVM));
     }
 }

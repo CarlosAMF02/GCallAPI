@@ -52,7 +52,6 @@ public class ChamadoController {
     }
 
     @DeleteMapping("/delete/{id}")
-    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Object> deleteCall(@PathVariable(name = "id") long chamadoId) {
         int responseStatus = chamadoService.deleteCall(chamadoId);
 
