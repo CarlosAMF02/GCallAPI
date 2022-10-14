@@ -5,14 +5,14 @@ public class AtendenteVM {
     private long cpf;
     private String email;
     private String password;
-    private Long companyId;
+    private Long cnpj;
 
-    public AtendenteVM(String name, long cpf, String email, String password, Long companyId) {
+    public AtendenteVM(String name, long cpf, String email, String password, Long cnpj) {
         this.name = name;
         this.cpf = cpf;
         this.email = email;
         this.password = password;
-        this.companyId = companyId;
+        this.cnpj = cnpj;
     }
 
     public String getName() {
@@ -47,11 +47,11 @@ public class AtendenteVM {
         this.password = password;
     }
 
-    public Long getCompanyId() {
-        return companyId;
+    public Long getCnpj() {
+        return cnpj;
     }
 
-    public void setCompanyId(Long companyId) {
-        this.companyId = companyId;
+    public void setCnpj(Long cnpj) {
+        this.cnpj = cnpj;
     }
 }
