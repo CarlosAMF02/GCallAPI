@@ -22,7 +22,7 @@ public class AtendenteService {
 
     public int insertAttendant(AtendenteVM atendenteVM){
         try {
-            Empresa empresa = empresaService.getCompanyById(atendenteVM.getCompanyId()).orElse(null);
+            Empresa empresa = empresaService.getCompanyByCpnj(atendenteVM.getCnpj()).orElse(null);
             if (empresa == null) return 1;
             Atendente atendente = atendenteRepository.findByEmail(atendenteVM.getEmail()).orElse(null);
             if (atendente != null) return 3;
@@ -41,7 +41,7 @@ public class AtendenteService {
             Atendente atendente = atendenteRepository.findById(attendantId).orElse(null);
             if (atendente==null) throw new Exception();
 
-            Empresa empresa = empresaService.getCompanyById(atendenteVM.getCompanyId()).orElse(null);
+            Empresa empresa = empresaService.getCompanyByCpnj(atendenteVM.getCnpj()).orElse(null);
             if(empresa==null) throw new Exception();
 
             atendente.setEmpresa(empresa);

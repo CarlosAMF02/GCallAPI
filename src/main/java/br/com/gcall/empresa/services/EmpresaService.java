@@ -58,6 +58,9 @@ public class EmpresaService {
     public Optional<Empresa> getCompanyById(long companyId) {
         return empresaRepository.findById(companyId);
     }
+    public Optional<Empresa> getCompanyByCpnj(long cnpj) {
+        return empresaRepository.findByCnpj(cnpj);
+    }
 
     public List<Empresa> getCompanies() {
         List<Empresa> companyList = null;
